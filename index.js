@@ -5,18 +5,11 @@ const projectRoute = require("./routes/project");
 const educationRoute = require("./routes/education");
 require("dotenv").config(); // load env
 const app = express();
-const pool = require("./config/config");
-const helmet = require("helmet");
-const compression = require("compression");
-const morgan = require("morgan");
 
 // Allow frontend
 app.use(cors());
 
 app.use(express.json());
-app.use(helmet());
-app.use(compression());
-app.use(morgan("combined"));
 
 // Test DB connection on startup
 const db = require("./config/config");
@@ -43,17 +36,8 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    result: false,
-    msg: "Internal server error",
-  });
-});
-
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  if (process.env.NODE_ENV !== "production")
     console.log(`Server running on port ${PORT}`);
 });
