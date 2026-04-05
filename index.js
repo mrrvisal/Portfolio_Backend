@@ -36,15 +36,11 @@ app.use(contactRoute);
 app.use(projectRoute);
 app.use(educationRoute);
 
-app.get("/health", async (req, res) => {
-  try {
-    await pool.query("SELECT 1");
-    res.json({ status: "healthy", message: "Backend ready" });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ status: "unhealthy", message: "Database unavailable" });
-  }
+app.get("/", async (req, res) => {
+  res.json({
+    result: true,
+    msg: "Welcome to my portfolio API",
+  });
 });
 
 app.use((err, req, res, next) => {
@@ -57,7 +53,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   if (process.env.NODE_ENV !== "production")
     console.log(`Server running on port ${PORT}`);
 });
