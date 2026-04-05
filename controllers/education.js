@@ -3,7 +3,6 @@ const educationService = require("../services/education");
 let getAll = async (req, res) => {
   try {
     let row = await educationService.getAll();
-    // console.log("Get success");
 
     return res.json({
       result: true,

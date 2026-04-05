@@ -6,18 +6,25 @@ const educationRoute = require("./routes/education");
 require("dotenv").config(); // load env
 const app = express();
 const pool = require("./config/config");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 
 // Allow frontend
 app.use(cors());
 
 app.use(express.json());
+app.use(helmet());
+app.use(compression());
+app.use(morgan("combined"));
 
 // Test DB connection on startup
 const db = require("./config/config");
 (async () => {
   try {
     const connection = await db.getConnection();
-    console.log("DB connected successfully");
+    if (process.env.NODE_ENV !== "production")
+      console.log("DB connected successfully");
     connection.release();
   } catch (err) {
     console.error("DB connection failed:", err.message);
@@ -29,26 +36,28 @@ app.use(contactRoute);
 app.use(projectRoute);
 app.use(educationRoute);
 
-app.get("/", async (req, res) => {
+app.get("/health", async (req, res) => {
   try {
-    // 1. Query database FIRST
-    const [rows] = await pool.query("SELECT * FROM educations");
-
-    // 2. Send ONE response with the data
-    res.json({
-      message: "Hello World",
-      data: rows,
-      count: rows.length,
-    });
+    await pool.query("SELECT 1");
+    res.json({ status: "healthy", message: "Backend ready" });
   } catch (err) {
-    console.error("Query error:", err);
-    // 3. Send error response ONLY if not already sent
-    res.status(500).json({ error: "Fetch failed", message: err.message });
+    res
+      .status(500)
+      .json({ status: "unhealthy", message: "Database unavailable" });
   }
 });
 
-const PORT = 4000;
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    result: false,
+    msg: "Internal server error",
+  });
+});
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  if (process.env.NODE_ENV !== "production")
+    console.log(`Server running on port ${PORT}`);
 });
