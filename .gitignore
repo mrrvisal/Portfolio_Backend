@@ -9,6 +9,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Coverage and test
+coverage/
+.nyc_output/
+
 # OS files
 .DS_Store
 
@@ -19,3 +23,18 @@ build/
 # Optional: IDE
 .vscode/
 .idea/
+
+# Database dumps
+*.sql
+db.sqlite
+
+# Runtime files
+pids/
+*.pid
+*.seed
+server.pid
+
+# Editor temp files
+*.swp
+*.swo
+/tmp/
