@@ -4,6 +4,10 @@ let getAll = async () => {
   let sql =
     "select * from contacts";
   let [row] = await pool.query(sql);
+  let count = "select count(*) as count from contacts";
+  let [countRow] = await pool.query(count);
+
+  return { ...row, total: countRow[0].count };
   return row;
 };
 let create = async (body) => {
