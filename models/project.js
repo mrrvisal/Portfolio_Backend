@@ -7,7 +7,7 @@ let getAll = async () => {
   let count = "select count(*) as count from projects";
   let [countRow] = await pool.query(count);
 
-  return { ...row, total: countRow[0].count };
+  return {row, countRow};
 };
 
 module.exports = {

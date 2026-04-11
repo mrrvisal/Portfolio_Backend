@@ -7,7 +7,7 @@ let getAll = async () => {
   let count = "select count(*) as count from contacts";
   let [countRow] = await pool.query(count);
 
-  return { ...row, total: countRow[0].count };
+  return { row, countRow};
   return row;
 };
 let create = async (body) => {
