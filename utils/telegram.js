@@ -11,13 +11,14 @@ const sendTelegramNotification = async ({ name, email, subject, message }) => {
   }
 
   const text = `
-📬 *New Contact Message*
-👤 *Name:* ${name}
-📧 *Email:* ${email}
-📌 *Subject:* ${subject}
-💬 *Message:*
-${message}
-  `.trim();
+🔔 *New Message Received*
+
+┌ 👤 *${name}*
+├ 📧 ${email}
+└ 📌 ${subject}
+
+💬 *"${message}"*
+`.trim();
 
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
