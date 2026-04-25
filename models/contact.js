@@ -1,15 +1,5 @@
 const pool = require("../config/config");
 
-let getAll = async () => {
-  let sql =
-    "select * from contacts";
-  let [row] = await pool.query(sql);
-  let count = "select count(*) as count from contacts";
-  let [countRow] = await pool.query(count);
-
-  return { row, countRow};
-  return row;
-};
 let create = async (body) => {
   let sql =
     "insert into contacts(name, email, subject, message) values (?,?,?,?)";
@@ -22,6 +12,5 @@ let create = async (body) => {
 };
 
 module.exports = {
-  getAll,
   create,
 };

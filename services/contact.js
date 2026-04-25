@@ -30,3 +30,7 @@ let create = async (body) => {
 
   return row;
 };
+
+module.exports = {
+  create
+};
